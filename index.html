@@ -1,0 +1,1717 @@
+```html
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오사카 & 교토 7박 8일 맞춤 여행 플래너 (10.27 - 11.03)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Pretendard', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        osaka: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        },
+                        kyoto: {
+                            50: '#fdf2f8',
+                            500: '#ec4899',
+                            600: '#db2777',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            word-break: keep-all; /* 폴드 및 모바일 환경 줄바꿈 최적화 */
+            overflow-wrap: break-word;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .rest-badge {
+            animation: pulse-soft 2.5s infinite;
+        }
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.75; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-blue-600 selection:text-white text-slate-800">
+
+    <!-- 상단 헤더 & 네비게이션 -->
+    <header class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md text-white shadow-lg border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between py-3 gap-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md shrink-0">
+                            <i class="fa-solid fa-plane-departure text-base sm:text-lg"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h1 class="text-base sm:text-xl font-bold tracking-tight">OSAKA & KYOTO 2026</h1>
+                                <span class="text-[11px] sm:text-xs bg-blue-500/20 text-blue-300 border border-blue-400/30 px-2 py-0.5 rounded-full font-medium">7박 8일 맞춤 플랜</span>
+                            </div>
+                            <p class="text-[11px] sm:text-xs text-slate-400">10.27 ~ 11.03 | 스마트패스·덕질·미식·허리케어 워킹</p>
+                        </div>
+                    </div>
+                    <button id="resetDataBtn" onclick="openResetModal()" class="md:hidden text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1.5 rounded-lg border border-slate-700 transition shrink-0">
+                        <i class="fa-solid fa-rotate-right mr-1"></i>초기화
+                    </button>
+                </div>
+
+                <!-- 4개 메인 탭 버튼 -->
+                <nav class="flex items-center gap-1 bg-slate-800/90 p-1 rounded-xl border border-slate-700/70 overflow-x-auto custom-scrollbar">
+                    <button onclick="switchPage('plan')" id="tab-plan" class="nav-tab flex-1 md:flex-initial flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-blue-600 text-white shadow whitespace-nowrap">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <span>여행계획</span>
+                    </button>
+                    <button onclick="switchPage('checklist')" id="tab-checklist" class="nav-tab flex-1 md:flex-initial flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white hover:bg-slate-700/50 whitespace-nowrap">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                        <span>체크리스트</span>
+                    </button>
+                    <button onclick="switchPage('packing')" id="tab-packing" class="nav-tab flex-1 md:flex-initial flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white hover:bg-slate-700/50 whitespace-nowrap">
+                        <i class="fa-solid fa-suitcase-rolling"></i>
+                        <span>준비물</span>
+                    </button>
+                    <button onclick="switchPage('budget')" id="tab-budget" class="nav-tab flex-1 md:flex-initial flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white hover:bg-slate-700/50 whitespace-nowrap">
+                        <i class="fa-solid fa-yen-sign"></i>
+                        <span>여행예산</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 컨텐츠 영역 -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-6">
+
+        <!-- ==========================================
+             PAGE 1: 여행계획 (ITINERARY)
+             ========================================== -->
+        <section id="page-plan" class="space-y-6">
+            
+            <!-- 핵심 여행 요약 카드 (공항 체크인, 스마트패스, 숙소, 패스 전략) -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <!-- 항공편 및 숙소 요약 -->
+                <div class="glass-card rounded-2xl p-4 sm:p-5 shadow-sm border-l-4 border-l-blue-600">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-jet-fighter text-blue-600"></i> 이스타항공 & 숙소 베이스캠프
+                        </h2>
+                        <span class="text-[11px] font-medium bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">온라인체크인/스마트패스완료</span>
+                    </div>
+                    <div class="space-y-2.5 text-xs text-slate-600">
+                        <div class="p-2.5 bg-slate-50 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                            <div>
+                                <span class="font-bold text-slate-800 block">출국: 10.27(화) ZE0615 (가방 수하물 위탁)</span>
+                                <span>인천(ICN) 09:55 <i class="fa-solid fa-arrow-right mx-1 text-slate-400"></i> 간사이(KIX) 11:55</span>
+                            </div>
+                            <span class="text-[11px] bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-semibold w-fit">하루카 특급</span>
+                        </div>
+                        <div class="p-2.5 bg-slate-50 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+                            <div>
+                                <span class="font-bold text-slate-800 block">귀국: 11.03(화) ZE0614</span>
+                                <span>간사이(KIX) 18:00 <i class="fa-solid fa-arrow-right mx-1 text-slate-400"></i> 인천(ICN) 19:50</span>
+                            </div>
+                            <span class="text-[11px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-semibold w-fit">난카이 공항급행</span>
+                        </div>
+                        <div class="pt-1 border-t border-slate-200 flex flex-col gap-1.5">
+                            <div class="flex items-center justify-between">
+                                <span><strong class="text-slate-800">숙소 1 (10/27~31):</strong> Hotel Sereno Sanno</span>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Hotel+Sereno+Sanno&query_place_id=ChIJ8VsZWTvdAGAR2uC76g6DQpU" target="_blank" class="text-blue-600 hover:underline font-medium"><i class="fa-solid fa-location-dot mr-0.5"></i>덴노지/도부쓰엔마에</a>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span><strong class="text-slate-800">숙소 2 (10/31~11/3):</strong> 히가시미쿠니 에어비앤비</span>
+                                <a href="https://www.google.com/maps/search/?api=1&query=4-chome-10-12+Higashimikuni+Yodogawa+Ward+Osaka&query_place_id=ChIJw1aEa0_kAGARnP0y3tL5fDU" target="_blank" class="text-blue-600 hover:underline font-medium"><i class="fa-solid fa-location-dot mr-0.5"></i>히가시미쿠니역 도보 3분</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 오사카 메트로 패스 (26시간 / 48시간권) 최적 구매 & 분배 가이드 -->
+                <div class="glass-card rounded-2xl p-4 sm:p-5 shadow-sm border-l-4 border-l-indigo-600">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-ticket text-indigo-600"></i> 오사카 지하철 패스 최적 분배 전략
+                        </h2>
+                        <span class="text-[11px] font-bold bg-indigo-100 text-indigo-800 px-2.5 py-0.5 rounded-full">48시간권 1장 + 26시간권 1장</span>
+                    </div>
+                    <p class="text-xs text-slate-600 mb-2.5 leading-relaxed">
+                        USJ 방문일(JR 이용)과 교토 방문일(간사이 레일패스 이용)을 제외하고, <strong>시간제 패스의 장점</strong>을 극대화한 사용자 맞춤형 황금 배분입니다!
+                    </p>
+                    <div class="space-y-2 text-xs">
+                        <div class="p-2 bg-indigo-50/80 border border-indigo-100 rounded-xl">
+                            <div class="font-bold text-indigo-950 flex justify-between">
+                                <span>① 48시간권 1장 (¥1,700)</span>
+                                <span class="text-indigo-600">Day 3 ~ Day 5 아침</span>
+                            </div>
+                            <p class="text-slate-600 mt-0.5"><strong>10/29(목) 개시 ~ 10/31(토) 만료:</strong> 3일차 시내 투어 + 4일차 아베노큐즈몰·난바 + 5일차 우메다 쇼핑 및 신오사카 숙소 이동까지 커버!</p>
+                        </div>
+                        <div class="p-2 bg-emerald-50/80 border border-emerald-100 rounded-xl">
+                            <div class="font-bold text-emerald-950 flex justify-between">
+                                <span>② 26시간권 1장 (¥1,000)</span>
+                                <span class="text-emerald-700">Day 6 일요일 ~ Day 7 월요일</span>
+                            </div>
+                            <p class="text-slate-600 mt-0.5"><strong>11/01(일) 예배일 개시 ~ 11/02(월) 만료:</strong> 일요일 나가호리바시교회 예배 이동 + 신사이바시 지하상가·덴덴타운 + 월요일 시내 전역 이동 커버!</p>
+                        </div>
+                        <div class="text-[11px] text-slate-500 flex items-center justify-between pt-1">
+                            <span>* 10/27(화) 프리미엄 간사이 패스 시작 / 11/2(월) 교토는 JR 신쾌속 이용</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 맞춤형 여행 원칙 (허리 케어 & 덕질 & 미식) -->
+                <div class="glass-card rounded-2xl p-4 sm:p-5 shadow-sm border-l-4 border-l-amber-500">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-xs sm:text-sm font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-heart-pulse text-amber-500"></i> 35세 남성 맞춤형 워킹 & 덕질 원칙
+                        </h2>
+                        <span class="text-[11px] font-medium bg-amber-50 text-amber-800 px-2.5 py-0.5 rounded-full">하루 2만보 & 허리휴식</span>
+                    </div>
+                    <ul class="space-y-2 text-xs text-slate-600">
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-mug-hot text-amber-600 mt-0.5"></i>
+                            <span><strong>허리 보호 휴식 타임:</strong> 2만보 도보로 지칠 때쯤 스페셜티 카페와 벤치에서 45~60분 착석 휴식을 의무 배치했습니다.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-robot text-purple-600 mt-0.5"></i>
+                            <span><strong>덕질 성지 완벽 반영:</strong> 덴덴타운(케이북스·라신반·애니메이트), 난바파크스, 파르코 5층(키디랜드/나가노마켓) 및 6층, 우메다 한큐 치이카와 랜드 총집합!</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-utensils text-rose-500 mt-0.5"></i>
+                            <span><strong>노알콜 미식 & 간식:</strong> 야키니쿠 라이크, 스시 사카바 사시스, 우오신, 야키니쿠 카메다, 맥도날드 한정메뉴(츠키미버거/초코파이/딸기파이) 전격 반영!</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-sun text-blue-500 mt-0.5"></i>
+                            <span><strong>날씨 맞춤 USJ:</strong> 가장 쾌청한 10/28(수) 오전 8시 도착 목표로 USJ 정복 및 오프피크 맛집 공략.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 일자별 선택 탭 버튼 (Day 1 ~ Day 8 + 전체 보기) -->
+            <div class="bg-white rounded-2xl p-3 shadow-sm border border-slate-200">
+                <div class="flex items-center justify-between mb-2 px-1">
+                    <span class="text-xs font-bold text-slate-500 uppercase tracking-wider"><i class="fa-solid fa-route mr-1 text-blue-600"></i>일자별 세부 일정 및 날씨·구글맵 동선</span>
+                    <button onclick="selectDay('all')" id="day-btn-all" class="text-xs font-semibold px-3 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                        전체 8일 한눈에 보기
+                    </button>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2" id="dayTabsContainer">
+                    <!-- JS로 렌더링 -->
+                </div>
+            </div>
+
+            <!-- 일자별 상세 일정 컨테이너 -->
+            <div id="itineraryContent" class="space-y-8">
+                <!-- JS로 렌더링 -->
+            </div>
+
+        </section>
+
+        <!-- ==========================================
+             PAGE 2: 체크리스트 (PRE-TRIP & PASS CHECKLIST)
+             ========================================== -->
+        <section id="page-checklist" class="hidden space-y-6">
+            <div class="glass-card rounded-2xl p-4 sm:p-6 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-6">
+                    <div>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-clipboard-check text-blue-600"></i> 출국 전 & 패스/예약 필수 체크리스트
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1">온라인 체크인, 스마트패스 완료! 이스타 항공 수하물 위탁 및 공항 미션 점검.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="text-right">
+                            <span class="text-xs text-slate-500 block">진행률</span>
+                            <span id="checklistProgressText" class="text-lg font-extrabold text-blue-600">0%</span>
+                        </div>
+                        <div class="w-32 h-3 bg-slate-200 rounded-full overflow-hidden">
+                            <div id="checklistProgressBar" class="h-full bg-blue-600 transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 새 항목 추가 -->
+                <div class="flex flex-col sm:flex-row gap-2 mb-6">
+                    <select id="newCheckCategory" class="px-3 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="출국 전 필수">출국 전 필수</option>
+                        <option value="패스 & 교통권">패스 & 교통권</option>
+                        <option value="숙소 & 현지팁">숙소 & 현지팁</option>
+                        <option value="덕질 & 쇼핑팁">덕질 & 쇼핑팁</option>
+                    </select>
+                    <input type="text" id="newCheckInput" placeholder="새로운 체크리스트 항목을 입력하세요..." class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <button onclick="addChecklistItem()" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl text-sm transition shadow-sm whitespace-nowrap">
+                        <i class="fa-solid fa-plus mr-1"></i>추가하기
+                    </button>
+                </div>
+
+                <div id="checklistContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- JS 렌더링 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PAGE 3: 준비물 (PACKING LIST)
+             ========================================== -->
+        <section id="page-packing" class="hidden space-y-6">
+            <div class="glass-card rounded-2xl p-4 sm:p-6 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4 mb-6">
+                    <div>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-suitcase-rolling text-indigo-600"></i> 맞춤형 준비물 점검표 (허리 케어 & 덕질 특화)
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-500 mt-1">10월 말~11월 초 오사카/교토 날씨 및 하루 2만보 워킹, 피규어/건프라 수납을 고려한 준비물입니다.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="text-right">
+                            <span class="text-xs text-slate-500 block">패킹 완료</span>
+                            <span id="packingProgressText" class="text-lg font-extrabold text-indigo-600">0%</span>
+                        </div>
+                        <div class="w-32 h-3 bg-slate-200 rounded-full overflow-hidden">
+                            <div id="packingProgressBar" class="h-full bg-indigo-600 transition-all duration-300" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 새 준비물 추가 -->
+                <div class="flex flex-col sm:flex-row gap-2 mb-6">
+                    <select id="newPackCategory" class="px-3 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="필수 서류 & 금융">필수 서류 & 금융</option>
+                        <option value="허리/발 케어 & 상비약">허리/발 케어 & 상비약</option>
+                        <option value="의류 & 날씨 대비">의류 & 날씨 대비</option>
+                        <option value="덕질(가챠/피규어) & 전자기기">덕질(가챠/피규어) & 전자기기</option>
+                    </select>
+                    <input type="text" id="newPackInput" placeholder="추가할 준비물을 입력하세요..." class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <button onclick="addPackingItem()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-sm transition shadow-sm whitespace-nowrap">
+                        <i class="fa-solid fa-plus mr-1"></i>추가하기
+                    </button>
+                </div>
+
+                <div id="packingContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- JS 렌더링 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             PAGE 4: 여행예산 (BUDGET TRACKER)
+             ========================================== -->
+        <section id="page-budget" class="hidden space-y-6">
+            <!-- 상단 요약 카드 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="glass-card rounded-2xl p-4 sm:p-5 shadow-sm border-b-4 border-b-blue-600">
+                    <span class="text-xs font-semibold text-slate-500 uppercase">총 예상 현지 지출 (엔화)</span>
+                    <div id="totalYenDisplay" class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">¥0</div>
+                    <span class="text-[11px] text-slate-500 mt-1 block">패스/항공/숙소 선결제 제외 현지 비용</span>
+                </div>
+                <div class="glass-card rounded-2xl p-4 sm:p-5 shadow-sm border-b-4 border-b-indigo-600">
+                    <span class="text-xs font-semibold text-slate-500 uppercase">원화 환산 금액 (약 9.1원/¥)</span>
+                    <div id="totalKrwDisplay" class="text-xl sm:text-2xl font-extrabold text-indigo-600 mt-1">₩0</div>
+                    <div class="flex items-center gap-2 mt-1">
+                        <span class="text-xs text-slate-500">환율(100엔당):</span>
+                        <input type="number" id="exchangeRateInput" value="910" onchange="renderBudget()" class="w-16 px-1 py-0.5 text-xs border border-slate-300 rounded font-semibold text-center">
+                        <span class="text-xs text-slate-500">원</span>
+                    </div>
+                </div>
+                <div class="glass-card rounded-2xl p-4 sm:p-5 shadow-sm border-b-4 border-b-emerald-600">
+                    <span class="text-xs font-semibold text-slate-500 uppercase">교통 & 코인라커 총액</span>
+                    <div id="transportYenDisplay" class="text-xl sm:text-2xl font-extrabold text-emerald-600 mt-1">¥0</div>
+                    <span class="text-[11px] text-slate-500 mt-1 block">지하철패스(2장) + 라커 + JR/한큐/게이한</span>
+                </div>
+                <div class="glass-card rounded-2xl p-4 sm:p-5 shadow-sm border-b-4 border-b-purple-600">
+                    <span class="text-xs font-semibold text-slate-500 uppercase">식비(카페/편의점) & 덕질 쇼핑</span>
+                    <div id="foodShoppingYenDisplay" class="text-xl sm:text-2xl font-extrabold text-purple-600 mt-1">¥0</div>
+                    <span class="text-[11px] text-slate-500 mt-1 block">맛집 + 케이북스/라신반/치이카와/건담</span>
+                </div>
+            </div>
+
+            <!-- 지출 내역 추가 및 테이블 -->
+            <div class="glass-card rounded-2xl p-4 sm:p-6 shadow-sm">
+                <h2 class="text-base sm:text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-calculator text-blue-600"></i> 카테고리별 & 일자별 상세 예산 관리
+                </h2>
+
+                <!-- 새 예산 항목 입력 -->
+                <div class="grid grid-cols-1 sm:grid-cols-5 gap-2.5 mb-6 bg-slate-50 p-3 sm:p-4 rounded-xl border border-slate-200">
+                    <select id="budgetDayInput" class="px-3 py-2 rounded-lg border border-slate-300 text-sm bg-white">
+                        <option value="사전준비">사전준비</option>
+                        <option value="Day 1 (10/27)">Day 1 (10/27)</option>
+                        <option value="Day 2 (10/28)">Day 2 (10/28)</option>
+                        <option value="Day 3 (10/29)">Day 3 (10/29)</option>
+                        <option value="Day 4 (10/30)">Day 4 (10/30)</option>
+                        <option value="Day 5 (10/31)">Day 5 (10/31)</option>
+                        <option value="Day 6 (11/01)">Day 6 (11/01)</option>
+                        <option value="Day 7 (11/02)">Day 7 (11/02)</option>
+                        <option value="Day 8 (11/03)">Day 8 (11/03)</option>
+                    </select>
+                    <select id="budgetCategoryInput" class="px-3 py-2 rounded-lg border border-slate-300 text-sm bg-white">
+                        <option value="식비/카페">식비/카페</option>
+                        <option value="교통/라커">교통/라커</option>
+                        <option value="덕질/쇼핑">덕질/쇼핑</option>
+                        <option value="관광/기타">관광/기타</option>
+                    </select>
+                    <input type="text" id="budgetTitleInput" placeholder="항목명 (예: 케이북스 피규어)" class="px-3 py-2 rounded-lg border border-slate-300 text-sm">
+                    <input type="number" id="budgetAmountInput" placeholder="금액 (엔화 ¥)" class="px-3 py-2 rounded-lg border border-slate-300 text-sm">
+                    <button onclick="addBudgetItem()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg text-sm py-2 px-4 transition whitespace-nowrap">
+                        <i class="fa-solid fa-plus mr-1"></i>내역 추가
+                    </button>
+                </div>
+
+                <!-- 예산 테이블 -->
+                <div class="overflow-x-auto custom-scrollbar">
+                    <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 border-b border-slate-200">
+                                <th class="py-3 px-3 sm:px-4 font-bold rounded-tl-xl">일자</th>
+                                <th class="py-3 px-3 sm:px-4 font-bold">카테고리</th>
+                                <th class="py-3 px-3 sm:px-4 font-bold">상세 내역</th>
+                                <th class="py-3 px-3 sm:px-4 font-bold text-right">예상 금액 (¥)</th>
+                                <th class="py-3 px-3 sm:px-4 font-bold text-right">원화 환산 (₩)</th>
+                                <th class="py-3 px-3 sm:px-4 font-bold text-center rounded-tr-xl">관리</th>
+                            </tr>
+                        </thead>
+                        <tbody id="budgetTableBody" class="divide-y divide-slate-200">
+                            <!-- JS 렌더링 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 하단 푸터 -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+            <div>
+                <p class="font-semibold text-slate-700">오사카 & 교토 7박 8일 커스텀 여행 웹앱 (단일 파일 배포형)</p>
+                <p class="mt-0.5">갤럭시 Z 폴드 및 모바일·태블릿 화면 맞춤형 줄바꿈 최적화 적용 완료.</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="openResetModal()" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition">
+                    <i class="fa-solid fa-rotate-right mr-1"></i>저장된 데이터 초기화
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 커스텀 모달 (alert/confirm 대체) -->
+    <div id="customModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+            <h3 id="modalTitle" class="text-lg font-bold text-slate-900 mb-2">데이터 초기화 안내</h3>
+            <p id="modalMessage" class="text-sm text-slate-600 mb-6">체크리스트, 준비물, 예산 내역을 초기 추천 상태로 되돌리시겠습니까?</p>
+            <div class="flex justify-end gap-2">
+                <button onclick="closeModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-semibold transition">취소</button>
+                <button id="modalConfirmBtn" onclick="confirmResetData()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-sm font-semibold transition">초기화 실행</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 자바스크립트 로직 -->
+    <script>
+        // =========================================================================
+        // 1. 사용자 맞춤형 소일정 반영 7박 8일 전체 일정 데이터
+        // =========================================================================
+        const itineraryData = [
+            {
+                day: 1,
+                date: "10월 27일 (화)",
+                shortDate: "10/27 (화)",
+                title: "인천공항 출발 & 오사카 입성, 덴덴타운 덕질 & 하루카스 300",
+                theme: "온라인체크인/스마트패스 완료! 덴덴타운 덕질 & 프리미엄 조이패스 개시",
+                baseHotel: "Hotel Sereno Sanno (덴노지/산노)",
+                passUsed: "프리미엄 간사이 조이 패스 (하루카 1회권 + 하루카스 300 무료) 사용 시작",
+                estSteps: "약 16,000보 (중간 카페·전망대 휴식 2회)",
+                sunrise: "06:13 (오사카) / 06:51 (인천)",
+                sunset: "17:10 (오사카) / 17:41 (인천)",
+                isFlightDay: true,
+                flightWeather: {
+                    departureLabel: "출발지 날씨 (인천공항 ICN | ~09:55 출발 전)",
+                    departureTemp: "최저 7°C / 최고 16°C",
+                    departureCond: "맑음 ☀️ (아침 기온 쌀쌀함, 얇은 겉옷 필수)",
+                    arrivalLabel: "도착지 날씨 (간사이공항 & 오사카 | 11:55 도착 후~)",
+                    arrivalTemp: "최저 17°C / 최고 24°C (강수확률 70%)",
+                    arrivalCond: "흐리고 가끔 비 🌧️ → 저녁부터 차차 갬",
+                    warning: "⚠️ 공항 미션: 보조배터리 구매 및 간단한 식사 후 수하물 위탁 및 스마트패스로 탑승! 간사이 도착 직후 비 예보가 있으니 우산 준비하세요."
+                },
+                routeSummary: "인천공항(공항 미션: 보조배터리 구매 및 간식) ➔ 간사이공항(11:55) ➔ [하루카 특급] ➔ 덴노지역(코인라커 짐 보관) ➔ 돈카츠 KYK 아점 ➔ 덴노지공원 ➔ 츠텐카쿠 ➔ 덴덴타운(케이북스·라신반·애니메이트) ➔ 난바파크스 ➔ 하루카스 300 ➔ 야키니쿠 라이크(저녁) ➔ 아마짱 타코야끼 & 맥도날드(츠키미버거/초코파이/딸기파이) 야식 ➔ 숙소 복귀",
+                fullRouteMapUrl: "https://www.google.com/maps/dir/Kansai+International+Airport/Tennoji+Station/Tsutenkaku/Den-Den+Town/Namba+Parks/Abeno+Harukas/",
+                schedule: [
+                    {
+                        time: "07:30 - 09:55",
+                        place: "인천공항: 보조배터리 구매 & 간단 식사 & 수하물 위탁 (ZE0615)",
+                        category: "항공/공항미션",
+                        activity: "온라인 체크인 및 스마트패스 완료 상태. 공항 면세/편의점에서 보조배터리 구매 및 가벼운 아침 식사 후 수하물(가방) 위탁 후 09:55 이스타항공 ZE0615 탑승.",
+                        transport: "ZE0615 항공편 (2시간 소요)",
+                        cost: "항공권 선결제",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Incheon+International+Airport"
+                    },
+                    {
+                        time: "11:55 - 13:10",
+                        place: "간사이공항 ➔ 하루카 특급 ➔ JR 덴노지역 (코인라커 짐 보관)",
+                        category: "이동/짐보관",
+                        activity: "간사이공항 입국 후 프리미엄 간사이 조이 패스 내 하루카 티켓 활성화하여 덴노지역으로 이동(35분). 체크인(16시) 전이므로 덴노지역 코인라커에 캐리어 보관.",
+                        transport: "JR 특급 하루카 (조이패스 무료)",
+                        cost: "¥700 (코인라커)",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Tennoji+Station&query_place_id=ChIJed3mI_DdAGARJyFcpACSbwc"
+                    },
+                    {
+                        time: "13:20 - 14:20",
+                        place: "아점: 돈카츠 KYK (덴노지오사카점 등 평점 4.1★)",
+                        category: "맛집(돈까스)",
+                        activity: "덴노지 인근 현지인들이 찾는 KYK 돈카츠 매장에서 두툼하고 바삭한 로스카츠 정식으로 첫 끼 식사.",
+                        transport: "도보 5분",
+                        cost: "¥1,800",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Tonkatsu+KYK+Tennoji"
+                    },
+                    {
+                        time: "14:30 - 15:10",
+                        place: "덴노지공원 (텐텐스) 산책",
+                        category: "관광/산책",
+                        activity: "도심 속 탁 트인 잔디광장 덴노지공원(텐텐스)을 가볍게 산책하며 첫날 여유 즐기기.",
+                        transport: "도보 5분",
+                        cost: "¥0",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Tennoji+Park&query_place_id=ChIJc1u5VjvdAGARm8g8Fw9yUfQ"
+                    },
+                    {
+                        time: "15:20 - 16:00",
+                        place: "신세카이 & 츠텐카쿠 전망대 구경",
+                        category: "조이패스/골목",
+                        activity: "레트로 감성 넘치는 신세카이 골목과 츠텐카쿠 주변 구경.",
+                        transport: "도보 8분",
+                        cost: "¥0 (조이패스)",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Tsutenkaku&query_place_id=ChIJ_0Lgd2DnAGARV0X03lbPy-U"
+                    },
+                    {
+                        time: "16:15 - 18:00",
+                        place: "덴덴타운 덕질 (케이북스, 라신반, 애니메이트 등)",
+                        category: "덕질(피규어/굿즈)",
+                        activity: "오사카 서브컬처의 성지 덴덴타운 집중 공략! 케이북스(K-BOOKS), 라신반, 애니메이트에서 피규어와 굿즈 보물찾기.",
+                        transport: "도보 12분",
+                        cost: "¥8,000 (덕질 예산)",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Den-Den+Town+Osaka&query_place_id=ChIJFzfO42fnAGARFUPA3T3woPk"
+                    },
+                    {
+                        time: "18:10 - 19:00",
+                        place: "난바파크스 구경 & 허리 휴식",
+                        category: "현대건축/허리휴식",
+                        activity: "[중간 휴식 타임] 협곡 형태의 아름다운 현대 건축물 난바파크스를 구경하며 벤치와 카페에서 다리와 허리 휴식.",
+                        transport: "도보 10분",
+                        cost: "¥600 (커피)",
+                        isRest: true,
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Namba+Parks&query_place_id=ChIJ9RFkRWnnAGARZh-hyWjBhtg"
+                    },
+                    {
+                        time: "19:10 - 20:20",
+                        place: "아베노 하루카스 300 전망대 야경",
+                        category: "조이패스/야경",
+                        activity: "조이패스로 아베노 하루카스 300 60층 통유리 전망대 무료 입장하여 오사카 360도 야경 감상.",
+                        transport: "도보 10분",
+                        cost: "¥0 (프리미엄 조이패스)",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Abeno+Harukas&query_place_id=ChIJed3mI_DdAGARJyFcpACSbwc"
+                    },
+                    {
+                        time: "20:30 - 21:30",
+                        place: "저녁: 야키니쿠 라이크 (Yakiniku Like, 평점 4.2★) 1인 불판",
+                        category: "맛집(고기)",
+                        activity: "혼밥족과 술 없이 고기만 즐기기에 최고의 1인 1불판 야키니쿠 전문점! 갈비와 안창살 세트 저녁 식사.",
+                        transport: "텐노지/난바 이동",
+                        cost: "¥1,900",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Yakiniku+Like+Osaka"
+                    },
+                    {
+                        time: "21:40 - 22:30",
+                        place: "야식: 아마짱 타코야끼 & 맥도날드 츠키미버거·초코파이·딸기파이 한정메뉴",
+                        category: "야식/간식",
+                        activity: "현지 로컬 타코야끼(아마짱)와 일본 맥도날드 가을/겨울 시즌 한정 메뉴인 츠키미버거, 초코파이, 딸기파이를 포장하여 숙소로 복귀 후 반신욕과 함께 섭취!",
+                        transport: "도보 및 숙소 복귀",
+                        cost: "¥1,200",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Hotel+Sereno+Sanno&query_place_id=ChIJ8VsZWTvdAGAR2uC76g6DQpU"
+                    }
+                ]
+            },
+            {
+                day: 2,
+                date: "10월 28일 (수)",
+                shortDate: "10/28 (수)",
+                title: "가장 쾌청한 날(☀️)! 유니버설 스튜디오 재팬 (USJ) 올데이 정복 & 난바/신사이바시",
+                theme: "오전 8시 도착 목표! USJ 개장 직후 닌텐도 월드 정리권 발급 & 저녁 스시 만찬",
+                baseHotel: "Hotel Sereno Sanno (덴노지/산노)",
+                passUsed: "프리미엄 간사이 조이 패스 (USJ 1일권 사용) + JR 개별 이동",
+                estSteps: "약 20,000보 (파크 내 벤치 및 카페 착석 휴식 3회 필수)",
+                sunrise: "06:14",
+                sunset: "17:09",
+                isFlightDay: false,
+                weather: {
+                    condition: "쾌청하고 맑음 ☀️ (USJ 방문 최적의 날씨!)",
+                    temp: "최저 11°C / 최고 17°C",
+                    warning: "💡 맑은 날 USJ 최적화: 아침 8시 도착을 목표로 움직이세요! 입장 즉시 공식 앱에서 슈퍼 닌텐도 월드 e정리권 발급 필수. 저녁에는 난바/신사이바시(다이마루 9층 포켓몬, 파르코 5층 키디랜드·나가노마켓·6층) 투어."
+                },
+                routeSummary: "숙소 ➔ JR 신이마미야역 ➔ 유니버설시티역(08:00 도착 목표) ➔ USJ 입장(닌텐도 월드 정리권 발급, 마리오카트, 헐리우드 드림, 워터월드, 해리포터) ➔ 유니버설 시티워크 ➔ 난바·신사이바시(다이마루 9층 포켓몬센터, 파르코 5층 키디랜드·나가노마켓·6층) ➔ 저녁: 스시 사카바 사시스 난바점 & 우오신 ➔ 숙소 복귀",
+                fullRouteMapUrl: "https://www.google.com/maps/dir/Hotel+Sereno+Sanno/Universal+Studios+Japan/Shinsaibashi+Parco/Hotel+Sereno+Sanno/",
+                schedule: [
+                    {
+                        time: "07:15 - 08:00",
+                        place: "숙소 출발 ➔ JR 유니버설시티역 이동",
+                        category: "이동(JR)",
+                        activity: "JR 신이마미야역에서 오사카 순환선 탑승 후 니시쿠조 환승하여 오전 8시 전 유니버설시티역 도착 목표.",
+                        transport: "JR 열차 (25분)",
+                        cost: "¥200",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Universal+Studios+Japan&query_place_id=ChIJXeLVg9DgAGARqlIyMCX-BTY"
+                    },
+                    {
+                        time: "08:00 - 15:00",
+                        place: "유니버설 스튜디오 재팬 (USJ) 정복 & 닌텐도 월드",
+                        category: "조이패스/테마파크",
+                        activity: "입장 직후 공식 앱으로 슈퍼 닌텐도 월드 e정리권 발급! 마리오 카트, 해리포터 포비든 저니 탑승 및 워터월드 공연 관람으로 중간 허리 휴식.",
+                        transport: "파크 내 도보",
+                        cost: "¥0 (조이패스 USJ 1일권)",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Universal+Studios+Japan&query_place_id=ChIJXeLVg9DgAGARqlIyMCX-BTY"
+                    },
+                    {
+                        time: "15:00 - 16:30",
+                        place: "유니버설 시티워크 구경 및 당충전 휴식",
+                        category: "카페/휴식",
+                        activity: "[중간 휴식 타임] 파크를 나와 시티워크 카페/스타벅스에 앉아 커피와 디저트로 다리 피로 회복.",
+                        transport: "도보 5분",
+                        cost: "¥800",
+                        isRest: true,
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Universal+Studios+Japan&query_place_id=ChIJXeLVg9DgAGARqlIyMCX-BTY"
+                    },
+                    {
+                        time: "17:00 - 19:00",
+                        place: "난바·신사이바시 덕질 투어 (다이마루 9층 포켓몬, 파르코 5층 키디랜드·나가노마켓·6층)",
+                        category: "덕질(포켓몬/치이카와)",
+                        activity: "다이마루 백화점 9층 포켓몬 센터, 신사이바시 파르코 5층 키디랜드 & 나가노 마켓(치이카와), 6층 캐릭터 층 집중 탐방!",
+                        transport: "JR + 지하철 이동",
+                        cost: "¥5,000 (굿즈 쇼핑)",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Shinsaibashi+Parco&query_place_id=ChIJHZ9qxhDnAGARS3udWVQdvD0"
+                    },
+                    {
+                        time: "19:15 - 20:45",
+                        place: "저녁: 스시 사카바 사시스 난바점 & 우오신 (평점 4.3★)",
+                        category: "맛집(스시)",
+                        activity: "줄 서서 먹는 가성비 갑 오사카 명물 스시집 '사시스'에서 참치 김밥 및 새우 스시, 그리고 거대 네타로 유명한 '우오신 스시'에서 신선한 초밥 만찬.",
+                        transport: "도보 이동",
+                        cost: "¥3,500",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Sushi+Sakaba+Sashisu+Namba"
+                    },
+                    {
+                        time: "21:00 - 21:30",
+                        place: "도톤보리 강변 야경 산책 후 숙소 복귀",
+                        category: "산책/휴식",
+                        activity: "글리코상 야경을 감상하며 소화시킨 후 숙소로 복귀하여 휴족시간 부착.",
+                        transport: "도보 및 지하철",
+                        cost: "¥200",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Hotel+Sereno+Sanno&query_place_id=ChIJ8VsZWTvdAGAR2uC76g6DQpU"
+                    }
+                ]
+            },
+            {
+                day: 3,
+                date: "10월 29일 (목)",
+                shortDate: "10/29 (목)",
+                title: "오사카성 ➔ 덴만구 ➔ 나카자키초 ➔ 우메다 공중정원 ➔ 도톤보리 & 야키니쿠 카메다",
+                theme: "오사카 지하철 48시간권 개시(10:30)! 역사 탐방, 감성 골목, 공중정원 야경",
+                baseHotel: "Hotel Sereno Sanno (덴노지/산노)",
+                passUsed: "오사카 메트로 48시간권 개시 (10/29 10:30 ~ 10/31 10:30) + 조이패스(공중정원)",
+                estSteps: "약 17,500보 (나카자키초 및 공중정원 라운지 휴식 2회)",
+                sunrise: "06:15",
+                sunset: "17:08",
+                isFlightDay: false,
+                weather: {
+                    condition: "구름 조금 후 맑음 ⛅",
+                    temp: "최저 9°C / 최고 19°C",
+                    warning: "💡 시간 주의: 우메다 공중정원은 조이패스 무료 입장이 오후 5시(17:00) 마감이므로 15:45까지 입장하도록 합니다!"
+                },
+                routeSummary: "도부쓰엔마에역(10:30 48h 패스 개시) ➔ 오사카성 ➔ 덴만구 ➔ 점심: 마코토야혼포 ➔ 나카자키초 레트로 골목 & 카페 휴식 ➔ 우메다 공중정원(15:45 입장) ➔ 도톤보리 ➔ 저녁: 야키니쿠 카메다 ➔ 숙소 복귀",
+                fullRouteMapUrl: "https://www.google.com/maps/dir/Hotel+Sereno+Sanno/Osaka+Castle/Osaka+Tenmangu/Nakazakicho/Umeda+Sky+Building/Dotonbori/",
+                schedule: [
+                    {
+                        time: "10:20 - 11:00",
+                        place: "도부쓰엔마에역 ➔ 오사카성 (48시간권 개시!)",
+                        category: "이동(지하철패스)",
+                        activity: "오전 10:30 정각에 오사카 메트로 48시간권 개시 후 오사카비즈니스파크역/다니마치욘초메역으로 이동하여 오사카성 공원 산책.",
+                        transport: "오사카 메트로 (48시간권 무료)",
+                        cost: "¥1,700 (48시간권 1장 구입)",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Osaka+Castle&query_place_id=ChIJi99o2wvnAGARkQe_yWv5Q1E"
+                    },
+                    {
+                        time: "11:00 - 12:15",
+                        place: "오사카성 천수각 및 해자 산책",
+                        category: "관광/역사",
+                        activity: "도요토미 히데요시가 건립한 오사카성 천수각 주변과 광활한 해자 정원 산책.",
+                        transport: "도보",
+                        cost: "¥600 (천수각 내부 관람 시)",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Osaka+Castle&query_place_id=ChIJi99o2wvnAGARkQe_yWv5Q1E"
+                    },
+                        {
+                        time: "12:30 - 13:30",
+                        place: "오사카 덴만구 신사 산책 & 점심: 마코토야혼포 (평점 4.2★)",
+                        category: "맛집(라멘/식사)",
+                        activity: "학문의 신을 모시는 오사카 덴만구 신사를 참배하고, 저장해둔 인근 현지 맛집 '마코토야혼포'에서 진한 돈코츠/소유 라멘 점심 식사.",
+                        transport: "지하철 + 도보",
+                        cost: "¥1,300",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Osaka+Tenmangu"
+                    },
+                    {
+                        time: "13:45 - 15:15",
+                        place: "나카자키초 레트로 골목 산책 & 카페 휴식",
+                        category: "골목감성/허리휴식",
+                        activity: "[중간 휴식 타임 1] 1920년대 목조 가옥이 보존된 나카자키초 골목 산책 후 감성 카페에 앉아 핸드드립 커피와 디저트로 45분간 허리 휴식.",
+                        transport: "도보",
+                        cost: "¥1,100",
+                        isRest: true,
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Nakazakicho+Osaka"
+                    },
+                    {
+                        time: "15:30 - 17:00",
+                        place: "우메다 스카이빌딩 공중정원 전망대 (17시 전 입장!)",
+                        category: "조이패스/전망대",
+                        activity: "[중간 휴식 타임 2] 조이패스 규정(17시 마감)에 맞춰 15:45 입장. 40층 통유리 소파에 앉아 주간 시티뷰와 노을 감상.",
+                        transport: "도보",
+                        cost: "¥0 (프리미엄 조이패스)",
+                        isRest: true,
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Umeda+Sky+Building&query_place_id=ChIJbyd0kIjmAGAR_crecCbjwlc"
+                    },
+                    {
+                        time: "17:30 - 19:00",
+                        place: "도톤보리 강변 산책 및 글리코상 포토존",
+                        category: "관광/야경",
+                        activity: "우메다에서 미도스지선 타고 난바로 이동 후 도톤보리 네온사인 야경 구경.",
+                        transport: "오사카 메트로 (48시간권 무료)",
+                        cost: "¥0",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Dotonbori&query_place_id=ChIJg2DcJhXnAGARCbeAHoZrPeQ"
+                    },
+                    {
+                        time: "19:15 - 21:00",
+                        place: "저녁: 야키니쿠 카메다 (Yakiniku Kameda, 평점 4.4★)",
+                        category: "맛집(야키니쿠)",
+                        activity: "현지 미식가들에게 입소문 난 최고급 소고기 야키니쿠 전문점 '카메다'에서 살살 녹는 와규 구이 저녁 만찬.",
+                        transport: "도보",
+                        cost: "¥3,800",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Yakiniku+Kameda+Osaka"
+                    },
+                    {
+                        time: "21:15 - 21:40",
+                        place: "숙소 복귀 및 휴식",
+                        category: "휴식",
+                        activity: "미도스지선으로 도부쓰엔마에역 복귀.",
+                        transport: "오사카 메트로",
+                        cost: "¥0",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Hotel+Sereno+Sanno&query_place_id=ChIJ8VsZWTvdAGAR2uC76g6DQpU"
+                    }
+                ]
+            },
+            {
+                day: 4,
+                date: "10월 30일 (금)",
+                shortDate: "10/30 (금)",
+                title: "아베노 큐즈몰(3층 덕질) ➔ 난바·신사이바시(포켓몬·키디랜드·나가노마켓·파르코) ➔ 아메리카무라",
+                theme: "비 예보(80%) 대비 실내 중심 코스! 아베노 큐즈몰 3층 덕질 & 신사이바시 캐릭터 숍 재방문",
+                baseHotel: "Hotel Sereno Sanno (덴노지/산노)",
+                passUsed: "오사카 메트로 48시간권 연속 사용 (¥0)",
+                estSteps: "약 16,000보 (카페 라운지 휴식 포함)",
+                sunrise: "06:16",
+                sunset: "17:07",
+                isFlightDay: false,
+                weather: {
+                    condition: "간헐적 비 🌧️ (강수확률 80%)",
+                    temp: "최저 15°C / 최고 20°C",
+                    warning: "☔ 비 예보 대비: 아베노 큐즈몰, 신사이바시 파르코 및 다이마루 백화점 연결통로 위주로 비를 피하며 쾌적하게 덕질과 쇼핑을 즐기는 일정입니다."
+                },
+                routeSummary: "아베노 큐즈몰 3층 덕질 ➔ 점심: 큐즈몰 내 일식 로컬 맛집 ➔ 난바·신사이바시(다이마루 9층 포켓몬, 파르코 5층 키디랜드·나가노마켓·6층) ➔ 아메리카무라 ➔ 저녁: 스시 또는 라멘 ➔ 숙소 복귀",
+                fullRouteMapUrl: "https://www.google.com/maps/dir/Hotel+Sereno+Sanno/Abeno+Qs+Mall/Shinsaibashi+Parco/Amerikamura/",
+                schedule: [
+                    {
+                        time: "10:30 - 12:30",
+                        place: "아베노 큐즈몰 3층 덕질 샵 탐방",
+                        category: "덕질/쇼핑",
+                        activity: "덴노지역 바로 앞 아베노 큐즈몰 3층에 위치한 다양한 피규어, 캐릭터 굿즈, 애니메이션 샵 구경.",
+                        transport: "도보 5분",
+                        cost: "¥3,000",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Abeno+Qs+Mall&query_place_id=ChIJed3mI_DdAGARJyFcpACSbwc"
+                    },
+                    {
+                        time: "12:45 - 13:45",
+                        place: "점심: 아베노 큐즈몰 내 현지인 맛집 (평점 4.2★)",
+                        category: "맛집(일식)",
+                        activity: "큐즈몰 식당가에서 웨이팅 적고 깔끔한 소바/돈카츠 세트로 맛있는 점심 식사.",
+                        transport: "실내 이동",
+                        cost: "¥1,600",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Abeno+Qs+Mall"
+                    },
+                    {
+                        time: "14:00 - 17:00",
+                        place: "난바·신사이바시 집중 투어 (다이마루 9층 포켓몬, 파르코 5층 키디랜드·나가노마켓·6층)",
+                        category: "덕질(치이카와/포켓몬)",
+                        activity: "수요일에 시간이 부족했거나 더 자세히 보고 싶었던 신사이바시 파르코 5층(키디랜드, 나가노 마켓-치이카와), 6층, 다이마루 9층 포켓몬센터 재방문 및 쇼핑!",
+                        transport: "오사카 메트로 (48시간권 무료)",
+                        cost: "¥8,000 (덕질 예산)",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Shinsaibashi+Parco&query_place_id=ChIJHZ9qxhDnAGARS3udWVQdvD0"
+                    },
+                    {
+                        time: "17:15 - 18:15",
+                        place: "카페 라운지에서 허리 휴식 & 전리품 정리",
+                        category: "카페/허리휴식",
+                        activity: "[중간 휴식 타임] 신사이바시 백화점 내부 카페 라운지에 앉아 따뜻한 음료를 마시며 1시간 동안 허리 피로 풀기.",
+                        transport: "도보",
+                        cost: "¥900",
+                        isRest: true,
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Shinsaibashi+Parco"
+                    },
+                    {
+                        time: "18:30 - 19:30",
+                        place: "아메리카무라 골목 구경 및 빈티지 숍 탐방",
+                        category: "골목/빈티지",
+                        activity: "개성 넘치는 스트리트 컬처의 메카 아메리카무라 골목길 산책.",
+                        transport: "도보",
+                        cost: "¥1,000",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Amerikamura&query_place_id=ChIJ_0Lgd2DnAGARV0X03lbPy-U"
+                    },
+                    {
+                        time: "19:45 - 20:45",
+                        place: "저녁: 난바 우오신 또는 로컬 초밥집",
+                        category: "맛집(스시)",
+                        activity: "신선한 해산물과 스시로 든든한 저녁 만찬.",
+                        transport: "도보",
+                        cost: "¥2,500",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Uoshin+Namba"
+                    },
+                    {
+                        time: "21:00 - 21:30",
+                        place: "숙소 복귀",
+                        category: "휴식",
+                        activity: "지하철로 숙소 복귀 후 휴식.",
+                        transport: "오사카 메트로",
+                        cost: "¥0",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Hotel+Sereno+Sanno&query_place_id=ChIJ8VsZWTvdAGAR2uC76g6DQpU"
+                    }
+                ]
+            },
+            {
+                day: 5,
+                date: "10월 31일 (토)",
+                shortDate: "10/31 (토)",
+                title: "우메다 한큐 치이카와 랜드 & 키디랜드 쇼핑, 우메다 공중정원 ➔ 신오사카 숙소 이동",
+                theme: "48시간 지하철 패스 마지막 날! 우메다 덕질(치이카와 랜드) 끝판왕 & 히가시미쿠니 숙소(10분 거리) 이동",
+                baseHotel: "히가시미쿠니 에어비앤비 (4-chome-10-12 Higashimikuni)",
+                passUsed: "오사카 메트로 48시간권 마지막 사용 (10:30까지) + 우메다 공중정원(예비일 활용 가능)",
+                estSteps: "약 14,000보 (우메다 카페 휴식)",
+                sunrise: "06:17",
+                sunset: "17:06",
+                isFlightDay: false,
+                weather: {
+                    condition: "구름 조금, 포근하고 맑음 ⛅",
+                    temp: "최저 15°C / 최고 23°C",
+                    warning: "💡 숙소 이동 안내: 오전 10시 30분 전까지 48시간권으로 지하철 이동 가능! 체크아웃 후 우메다로 이동하여 치이카와 랜드 쇼핑 후 신오사카역 인근 숙소(히가시미쿠니 도보 3분)로 이동."
+                },
+                routeSummary: "호텔 세레노 산노 체크아웃 ➔ 우메다 한큐 3번가 치이카와 랜드 & 키디랜드 쇼핑 ➔ 점심: 우메다 로컬 맛집 ➔ 우메다 공중정원(목요일 못 갔을 경우 예비) ➔ 신오사카역(코인라커 짐 맡기기 또는 숙소 직행) ➔ 히가시미쿠니 숙소 체크인(도보 3분) ➔ 저녁: 히가시미쿠니 로컬 맛집",
+                fullRouteMapUrl: "https://www.google.com/maps/dir/Hotel+Sereno+Sanno/Chiikawa+Land+Osaka+Umeda/Umeda+Sky+Building/4-chome-10-12+Higashimikuni+Yodogawa+Ward+Osaka/",
+                schedule: [
+                    {
+                        time: "09:30 - 10:20",
+                        place: "호텔 체크아웃 ➔ 도부쓰엔마에역 ➔ 우메다역 이동",
+                        category: "이동/숙소이동",
+                        activity: "체크아웃 후 48시간 패스 만료(10:30) 전 미도스지선 탑승하여 우메다로 이동.",
+                        transport: "오사카 메트로 (48시간권 무료)",
+                        cost: "¥0",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Umeda+Station"
+                    },
+                    {
+                        time: "10:30 - 13:00",
+                        place: "우메다 한큐 3번가 치이카와 랜드 & 키디랜드 쇼핑",
+                        category: "덕질(치이카와/햄토리)",
+                        activity: "한큐 3번가 북관 지하 1층 '치이카와 랜드'와 대형 키디랜드에서 햄토리, 치이카와 한정 굿즈 및 인형 싹쓸이 쇼핑!",
+                        transport: "도보",
+                        cost: "¥10,000 (덕질 예산)",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Chiikawa+Land+Osaka+Umeda&query_place_id=ChIJOwETB6HnAGARguAMaM4PyDk"
+                    },
+                    {
+                        time: "13:10 - 14:15",
+                        place: "점심: 우메다 그랑프론트/한큐 3번가 로컬 맛집 (평점 4.2★)",
+                        category: "맛집(돈까스/라멘)",
+                        activity: "우메다 지하상가나 백화점 식당가에서 맛있는 돈카츠 또는 라멘 점심 식사.",
+                        transport: "도보",
+                        cost: "¥1,800",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Grand+Front+Osaka"
+                    },
+                    {
+                        time: "14:30 - 15:45",
+                        place: "우메다 공중정원 (목요일에 못 갔을 경우 예비일 활용)",
+                        category: "전망대/휴식",
+                        activity: "[중간 휴식 타임] 목요일 일정상 못 갔다면 오늘 방문하여 공중정원 전망대와 루프탑에서 휴식.",
+                        transport: "도보",
+                        cost: "¥0 (조이패스 남았을 경우 또는 일반 입장)",
+                        isRest: true,
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Umeda+Sky+Building&query_place_id=ChIJbyd0kIjmAGAR_crecCbjwlc"
+                    },
+                    {
+                        time: "16:00 - 17:00",
+                        place: "우메다역 ➔ 신오사카역 ➔ 히가시미쿠니 숙소 체크인",
+                        category: "숙소체크인",
+                        activity: "미도스지선으로 신오사카역 인근 히가시미쿠니 숙소(4-chome-10-12 Higashimikuni, 숙소에서 신오사카역까지 단 10분 거리!) 체크인 및 짐 정리.",
+                        transport: "오사카 메트로 미도스지선",
+                        cost: "¥190 (개별 탑승)",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=4-chome-10-12+Higashimikuni+Yodogawa+Ward+Osaka&query_place_id=ChIJw1aEa0_kAGARnP0y3tL5fDU"
+                    },
+                    {
+                        time: "18:00 - 19:30",
+                        place: "저녁: 히가시미쿠니역 로컬 일식 맛집 (평점 4.1★)",
+                        category: "맛집(일식)",
+                        activity: "관광객이 적고 현지인들이 찾는 히가시미쿠니 주거지역 로컬 맛집에서 편안하고 조용한 저녁 식사.",
+                        transport: "도보 3분",
+                        cost: "¥1,600",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Higashimikuni+Station"
+                    }
+                ]
+            },
+            {
+                day: 6,
+                date: "11월 1일 (일)",
+                shortDate: "11/01 (일)",
+                title: "주일 예배(오사카온누리교회) ➔ 신사이바시 크리스타 나가호리 ➔ 덴덴타운 ➔ 돈키호테",
+                theme: "일요일 주일 예배 참석(나가호리바시역, 숙소에서 31분) & 지하상가 및 덴덴타운 덕질",
+                baseHotel: "히가시미쿠니 에어비앤비 (4-chome-10-12 Higashimikuni)",
+                passUsed: "오사카 메트로 26시간권 개시 (11/1 일요일 예배 이동부터 11/2 월요일까지 커버)",
+                estSteps: "약 14,000보 (카페 휴식 포함)",
+                sunrise: "06:18",
+                sunset: "17:04",
+                isFlightDay: false,
+                weather: {
+                    condition: "구름 조금, 선선한 가을 날씨 ⛅",
+                    temp: "최저 13°C / 최고 18°C",
+                    warning: "⛪ 주일 예배 일정: 오전 신오사카 주변 브런치 후 미도스지선으로 나가호리바시역 인근 오사카온누리교회로 이동하여 14시 예배 참석."
+                },
+                routeSummary: "신오사카 주변 브런치 ➔ [미도스지선] ➔ 나가호리바시역 ➔ 오사카온누리교회 예배(14시) ➔ 신사이바시 크리스타 나가호리 지하상가 구경 ➔ 덴덴타운 재방문 ➔ 돈키호테 쇼핑 ➔ 저녁: 스시 또는 카레 ➔ 숙소 복귀",
+                fullRouteMapUrl: "https://www.google.com/maps/dir/4-chome-10-12+Higashimikuni+Yodogawa+Ward+Osaka/Nagahoribashi+Station/Den-Den+Town/Don+Quijote/",
+                schedule: [
+                    {
+                        time: "11:00 - 12:30",
+                        place: "신오사카/히가시미쿠니 주변 브런치 카페",
+                        category: "맛집/브런치",
+                        activity: "숙소 근처 조용하고 분위기 좋은 브런치 카페에서 커피와 샌드위치로 여유로운 주일 아침 식사.",
+                        transport: "도보 5분",
+                        cost: "¥1,300",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Shin-Osaka+Brunch"
+                    },
+                    {
+                        time: "12:45 - 13:40",
+                        place: "히가시미쿠니역 ➔ 오사카온누리교회 (나가호리바시역, 31분 소요)",
+                        category: "이동(지하철패스)",
+                        activity: "오사카 메트로 26시간권 개시 후 미도스지선 탑승하여 나가호리바시역으로 이동.",
+                        transport: "오사카 메트로 (26시간권 1장 ¥1,000 개시)",
+                        cost: "¥1,000 (26시간권 구입)",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Nagahoribashi+Station"
+                    },
+                    {
+                        time: "14:00 - 16:00",
+                        place: "오사카온누리교회 주일 오후 예배 참석",
+                        category: "예배/신앙",
+                        activity: "나가호리바시역 인근 오사카온누리교회에서 은혜로운 주일 14시 예배 참석.",
+                        transport: "도보",
+                        cost: "¥0",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Osaka+Onuri+Church"
+                    },
+                    {
+                        time: "16:15 - 17:30",
+                        place: "신사이바시 크리스타 나가호리 (대형 지하상가) 쇼핑 & 카페 휴식",
+                        category: "쇼핑/허리휴식",
+                        activity: "[중간 휴식 타임] 일본 최장 지하상가 중 하나인 '크리스타 나가호리'를 걸으며 쾌적한 실내 쇼핑 및 카페 휴식.",
+                        transport: "도보",
+                        cost: "¥800",
+                        isRest: true,
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Crysta+Nagahori"
+                    },
+                    {
+                        time: "17:45 - 19:15",
+                        place: "덴덴타운 재방문 (놓친 굿즈/피규어 재탐방)",
+                        category: "덕질(피규어)",
+                        activity: "지하철로 이동하여 덴덴타운에서 아쉽게 놓쳤던 굿즈나 피규어 최종 탐색.",
+                        transport: "오사카 메트로 (26시간권 무료)",
+                        cost: "¥5,000",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Den-Den+Town+Osaka"
+                    },
+                    {
+                        time: "19:30 - 20:30",
+                        place: "돈키호테 도톤보리/난바점 쇼핑",
+                        category: "쇼핑",
+                        activity: "일본 여행 필수 코스 돈키호테에서 간식, 의약품, 기념품 쇼핑.",
+                        transport: "도보",
+                        cost: "¥4,000",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Don+Quijote+Dotonbori"
+                    },
+                    {
+                        time: "20:45 - 21:30",
+                        place: "숙소 복귀",
+                        category: "휴식",
+                        activity: "지하철로 히가시미쿠니 숙소 복귀.",
+                        transport: "오사카 메트로 (26시간권 적용)",
+                        cost: "¥0",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=4-chome-10-12+Higashimikuni+Yodogawa+Ward+Osaka&query_place_id=ChIJw1aEa0_kAGARnP0y3tL5fDU"
+                    }
+                ]
+            },
+            {
+                day: 7,
+                date: "11월 2일 (월)",
+                shortDate: "11/02 (월)",
+                title: "교토 당일치기: JR 신쾌속 ➔ 후시미이나리신사 ➔ 청수사 ➔ 산넨자카·니넨자카 ➔ 기온",
+                theme: "신오사카역에서 JR 신쾌속 타고 교토 고속 이동! 후시미이나리 & 교토 전통 골목 완전 정복",
+                baseHotel: "히가시미쿠니 에어비앤비 (4-chome-10-12 Higashimikuni)",
+                passUsed: "JR 교토선 신쾌속 (개별 발권 또는 IC카드, 28분 소요)",
+                estSteps: "약 19,500보 (교토 강변 및 기온 전통 찻집 휴식 2회)",
+                sunrise: "06:19",
+                sunset: "17:04",
+                isFlightDay: false,
+                weather: {
+                    condition: "구름 많고 한때 맑음 ⛅",
+                    temp: "최저 14°C / 최고 22°C",
+                    warning: "🍁 교토 여행 팁: 신오사카역에서 JR 교토선 '신쾌속'을 타면 단 28분 만에 교토역에 도착합니다! 많이 걷는 코스이므로 기온 찻집에서 반드시 휴식하세요."
+                },
+                routeSummary: "신오사카역 ➔ [JR 신쾌속 (28분)] ➔ 교토역 ➔ 후시미이나리신사(붉은 도리이 터널) ➔ 점심: 교토 우동/소바 ➔ 청수사(기요미즈데라) ➔ 산넨자카·니넨자카 전통 골목(치이카와 모구모구 본점) ➔ 기온 거리 & 말차 카페 휴식 ➔ JR 교토역 ➔ 신오사카역 ➔ 저녁: 히가시미쿠니 라멘",
+                fullRouteMapUrl: "https://www.google.com/maps/dir/Shin-Osaka+Station/Fushimi+Inari+Taisha/Kiyomizu-dera/Gion+Kyoto/",
+                schedule: [
+                    {
+                        time: "08:30 - 09:30",
+                        place: "신오사카역 ➔ [JR 교토선 신쾌속] ➔ 교토역",
+                        category: "이동(JR신쾌속)",
+                        activity: "숙소에서 10분 거리인 신오사카역에서 JR 신쾌속 열차 탑승. 단 28분 만에 교토역 쾌속 도착!",
+                        transport: "JR 교토선 신쾌속 (28분 소요)",
+                        cost: "¥580 (JR 편도 운임)",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Kyoto+Station"
+                    },
+                    {
+                        time: "09:45 - 11:15",
+                        place: "후시미 이나리 신사 (천개의 붉은 도리이 터널)",
+                        category: "교토명소",
+                        activity: "교토 최고의 명소 후시미 이나리 대사의 끝없이 이어진 붉은 도리이 길을 산책.",
+                        transport: "JR 나라선 (2정거장)",
+                        cost: "¥150",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Fushimi+Inari+Taisha&query_place_id=ChIJIW0uPRUPAWAR6eI6dRzKGns"
+                    },
+                    {
+                        time: "11:30 - 12:45",
+                        place: "점심: 교토 전통 우동 또는 소바 맛집 (평점 4.3★)",
+                        category: "맛집(우동/소바)",
+                        activity: "교토 현지인들이 즐겨 찾는 깔끔한 면요리 전문점에서 따뜻한 청어소바 또는 덴푸라 우동 점심 식사.",
+                        transport: "버스/전철",
+                        cost: "¥1,400",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Kyoto+Udon"
+                    },
+                    {
+                        time: "13:00 - 14:30",
+                        place: "기요미즈데라 (청수사) 본당 무대 관람",
+                        category: "교토명소",
+                        activity: "유네스코 세계유산 기요미즈데라의 거대한 목조 무대와 교토 전경 조망.",
+                        transport: "버스/도보",
+                        cost: "¥500 (입장료)",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Kiyomizu-dera&query_place_id=ChIJB_vchdMIAWARujTEUIZlr2I"
+                    },
+                    {
+                        time: "14:40 - 16:00",
+                        place: "산넨자카·니넨자카 전통 골목 & 치이카와 모구모구 본점",
+                        category: "덕질/전통골목",
+                        activity: "교토 감성 가득한 돌담길 산넨자카·니넨자카를 내려오며 교토 한정 '치이카와 모구모구(Mogu-Mogu)' 숍 방문!",
+                        transport: "도보",
+                        cost: "¥3,000 (굿즈)",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Sannenzaka+Kyoto"
+                    },
+                    {
+                        time: "16:15 - 17:30",
+                        place: "기온 거리 전통 말차 카페 (허리 집중 휴식)",
+                        category: "카페/허리휴식",
+                        activity: "[중간 휴식 타임] 기온 거리의 고풍스러운 찻집에 들어가 우지 말차 파르페와 말차 라떼를 마시며 1시간 완벽 허리 휴식.",
+                        transport: "도보",
+                        cost: "¥1,300",
+                        isRest: true,
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Gion+Kyoto"
+                    },
+                    {
+                        time: "17:45 - 19:15",
+                        place: "교토역 ➔ [JR 신쾌속] ➔ 신오사카역 복귀 후 저녁",
+                        category: "이동/맛집",
+                        activity: "JR 신쾌속을 타고 신오사카역으로 쾌속 복귀 후, 히가시미쿠니 로컬 라멘집에서 든든한 저녁 식사.",
+                        transport: "JR 신쾌속 (28분)",
+                        cost: "¥580 (JR) + ¥1,400 (저녁)",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Shin-Osaka+Station"
+                    }
+                ]
+            },
+            {
+                day: 8,
+                date: "11월 3일 (화)",
+                shortDate: "11/03 (화)",
+                title: "여유로운 브런치 & 골목 구경 ➔ 난바 이동 ➔ 간사이공항 귀국 (ZE0614)",
+                theme: "여유로운 귀국일 브런치 & 카페 ➔ 난카이 공항급행 타고 인천으로 안전 귀국",
+                baseHotel: "히가시미쿠니 체크아웃 ➔ 인천 귀국",
+                passUsed: "난카이 공항급행 개별 발권",
+                isFlightDay: true,
+                estSteps: "약 9,000보 (카페 및 공항 이동)",
+                sunrise: "06:20 (오사카) / 06:58 (인천)",
+                sunset: "17:03 (오사카) / 17:33 (인천)",
+                flightWeather: {
+                    departureLabel: "출발지 날씨 (오사카 & 간사이공항 KIX | ~18:00 출발 전)",
+                    departureTemp: "최저 12°C / 최고 18°C",
+                    departureCond: "구름 조금 후 맑음 ⛅ (쾌적한 귀국길 날씨)",
+                    arrivalLabel: "도착지 날씨 (인천국제공항 ICN | 19:50 도착 후~)",
+                    arrivalTemp: "최저 4°C / 최고 13°C (야간 체감온도 5°C 내외)",
+                    arrivalCond: "맑고 쌀쌀함 🌙 (오사카보다 6~8°C 낮음!)",
+                    warning: "🧥 귀국일 기온차 주의: 오후 7시 50분 인천공항 도착 시 한국 밤 기온이 5~7°C로 꽤 춥습니다. 캐리어를 부치기 전 따뜻한 겉옷을 기내용 가방에 꼭 챙기세요!"
+                },
+                routeSummary: "히가시미쿠니 숙소 여유로운 브런치 & 골목 카페 ➔ 체크아웃 후 [미도스지선] ➔ 난바역(코인라커 짐 보관) ➔ 마지막 덕질 및 쇼핑 ➔ 난카이 난바역 ➔ [난카이 공항급행] ➔ 간사이공항(18:00 출발) ➔ 인천공항 도착(19:50)",
+                fullRouteMapUrl: "https://www.google.com/maps/dir/4-chome-10-12+Higashimikuni+Yodogawa+Ward+Osaka/Namba/Kansai+International+Airport/",
+                schedule: [
+                    {
+                        time: "09:30 - 11:30",
+                        place: "히가시미쿠니 숙소 근처 브런치 & 골목 카페 산책",
+                        category: "카페/휴식",
+                        activity: "여행 마지막 날 아침을 여유롭게 시작하며 동네 예쁜 골목 카페에서 스페셜티 커피와 브런치 즐기기.",
+                        transport: "도보",
+                        cost: "¥1,500",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Higashimikuni+Cafe"
+                    },
+                    {
+                        time: "11:45 - 12:30",
+                        place: "숙소 체크아웃 ➔ 난바역 이동 (코인라커 짐 보관)",
+                        category: "이동/짐보관",
+                        activity: "숙소 체크아웃 후 미도스지선 타고 난바역으로 이동하여 난카이 난바역 코인라커에 캐리어 보관.",
+                        transport: "오사카 메트로 미도스지선",
+                        cost: "¥280 (교통) + ¥700 (코인라커)",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Namba+Station"
+                    },
+                    {
+                        time: "12:45 - 14:00",
+                        place: "점심: 난바 로컬 일식 맛집 (스시 또는 돈카츠)",
+                        category: "맛집(일식)",
+                        activity: "오사카에서의 마지막 만찬으로 좋아하는 스시 또는 돈카츠 정식 식사.",
+                        transport: "도보",
+                        cost: "¥2,200",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Namba+Lunch"
+                    },
+                    {
+                        time: "14:15 - 15:00",
+                        place: "난바 최종 가챠 및 기념품 쇼핑",
+                        category: "덕질/쇼핑",
+                        activity: "남은 100엔 동전으로 공항 가기 전 마지막 가챠 뽑기 및 간식 구매.",
+                        transport: "도보",
+                        cost: "¥1,000",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Namba+Gacha"
+                    },
+                    {
+                        time: "15:15 - 16:05",
+                        place: "난카이 난바역 ➔ 간사이공항 제1터미널",
+                        category: "이동(공항철도)",
+                        activity: "코인라커에서 짐을 찾아 난카이 공항급행(¥970) 탑승하여 간사이공항으로 편안하게 이동.",
+                        transport: "난카이 전철 공항급행 (45분)",
+                        cost: "¥970",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Kansai+International+Airport"
+                    },
+                    {
+                        time: "16:15 - 18:00",
+                        place: "간사이공항 출국 수속 & 면세점 쇼핑",
+                        category: "공항/면세점",
+                        activity: "간사이공항 면세점에서 로이스 초콜릿 등 기념품 구매 후 ZE0614편 탑승 대기.",
+                        transport: "공항 내 도보",
+                        cost: "¥2,000",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Kansai+International+Airport"
+                    },
+                    {
+                        time: "18:00 - 19:50",
+                        place: "간사이공항(18:00) ➔ 인천국제공항(19:50) 도착 (ZE0614)",
+                        category: "귀국완료",
+                        activity: "이스타항공 ZE0614편 탑승 및 19:50 인천공항 도착. 쌀쌀한 한국 날씨에 맞춰 겉옷 착용 후 안전 귀가!",
+                        transport: "ZE0614 항공편 (1시간 50분)",
+                        cost: "항공권 선결제",
+                        mapUrl: "https://www.google.com/maps/search/?api=1&query=Incheon+International+Airport"
+                    }
+                ]
+            }
+        ];
+
+        // =========================================================================
+        // 2. 체크리스트, 준비물, 예산 초기 데이터
+        // =========================================================================
+        const defaultChecklist = [
+            { id: 1, category: "출국 전 필수", text: "이스타항공 온라인 체크인 완료 및 스마트패스 등록 완료", done: true },
+            { id: 2, category: "출국 전 필수", text: "이스타 항공 ZE0615(10/27) 가방 수하물 위탁 및 ZE0614(11/03) 귀국편 확인", done: true },
+            { id: 3, category: "출국 전 필수", text: "비짓재팬웹 (Visit Japan Web) 입국심사·세관신고 QR코드 등록 및 캡처", done: true },
+            { id: 4, category: "출국 전 필수", text: "eSIM 또는 로밍 개통 확인 (지하철 QR패스 및 구글맵용)", done: false },
+            { id: 5, category: "패스 & 교통권", text: "프리미엄 간사이 조이 패스 바우처 확인 (하루카, USJ, 공중정원, 하루카스300, 츠텐카쿠, 간사이 레일패스)", done: true },
+            { id: 6, category: "패스 & 교통권", text: "오사카 지하철 패스 2장 구매: 【48시간권 1장(¥1,700) + 26시간권 1장(¥1,000)】", done: false },
+            { id: 7, category: "숙소 & 현지팁", text: "숙소 1 (10/27~31): Hotel Sereno Sanno 체크인 정보 확인", done: false },
+            { id: 8, category: "숙소 & 현지팁", text: "숙소 2 (10/31~11/3): 히가시미쿠니 에어비앤비 (신오사카역 도보 10분) 체크인 가이드 확인", done: false },
+            { id: 9, category: "덕질 & 쇼핑팁", text: "USJ 10/28(수) 입장 직후 공식 앱에서 '슈퍼 닌텐도 월드' e정리권 발급하기", done: false },
+            { id: 10, category: "덕질 & 쇼핑팁", text: "덴덴타운(케이북스·라신반) 및 우메다 치이카와 랜드, 파르코 5~6층 덕질 리스트 점검", done: false }
+        ];
+
+        const defaultPacking = [
+            { id: 1, category: "필수 서류 & 금융", text: "여권 (만료일 6개월 이상) & 여권 사본", done: true },
+            { id: 2, category: "필수 서류 & 금융", text: "트래블로그 / 트래블월렛 카드 및 해외결제 신용카드", done: true },
+            { id: 3, category: "필수 서류 & 금융", text: "엔화 현금 및 100엔 동전용 동전지갑 (가챠·라멘 자판기용)", done: false },
+            { id: 4, category: "허리/발 케어 & 상비약", text: "쿠션감 최고의 러닝화/워킹화 (하루 2만보 허리 충격 흡수용)", done: false },
+            { id: 5, category: "허리/발 케어 & 상비약", text: "허리 보호대(복대) 및 동전파스 / 소염진통제", done: false },
+            { id: 6, category: "의류 & 날씨 대비", text: "초경량 접이식 우산 (10/27 및 10/30 비 예보 대비)", done: false },
+            { id: 7, category: "의류 & 날씨 대비", text: "경량 패딩 또는 자켓 (11/3 인천 귀국 시 야간 추위 대비)", done: false },
+            { id: 8, category: "덕질(가챠/피규어) & 전자기기", text: "인천공항에서 구매할 보조배터리 (기내 수납 필수)", done: false },
+            { id: 9, category: "덕질(가챠/피규어) & 전자기기", text: "110V 돼지코 어댑터 & 멀티 케이블", done: false },
+            { id: 10, category: "덕질(가챠/피규어) & 전자기기", text: "접이식 대형 보스턴백 & 뽁뽁이 (건프라·피규어·치이카와 인형 수납용)", done: false }
+        ];
+
+        const defaultBudget = [
+            { id: 1, day: "사전준비", category: "교통/라커", title: "오사카 지하철 48시간권 1장 + 26시간권 1장", amount: 2700 },
+            { id: 2, day: "Day 1 (10/27)", category: "교통/라커", title: "공항 보조배터리 구매 + 덴노지역 코인라커", amount: 3700 },
+            { id: 3, day: "Day 1 (10/27)", category: "식비/카페", title: "돈카츠 KYK + 야키니쿠 라이크 + 아마짱 타코야끼 & 맥도날드 한정메뉴", amount: 6500 },
+            { id: 4, day: "Day 1 (10/27)", category: "덕질/쇼핑", title: "덴덴타운 케이북스·라신반·애니메이트 피규어 덕질", amount: 8000 },
+            { id: 5, day: "Day 2 (10/28)", category: "교통/라커", title: "JR 신이마미야 ↔ 유니버설시티 왕복 운임", amount: 400 },
+            { id: 6, day: "Day 2 (10/28)", category: "식비/카페", title: "USJ 간식 + 스시 사카바 사시스 & 우오신 저녁 만찬", amount: 5000 },
+            { id: 7, day: "Day 2 (10/28)", category: "덕질/쇼핑", title: "파르코 5층 키디랜드·나가노마켓(치이카와) & 다이마루 포켓몬", amount: 5000 },
+            { id: 8, day: "Day 3 (10/29)", category: "식비/카페", title: "마코토야혼포 라멘 + 나카자키초 카페 + 야키니쿠 카메다", amount: 6200 },
+            { id: 9, day: "Day 4 (10/30)", category: "식비/카페", title: "아베노 큐즈몰 점심 + 우오신 저녁", amount: 4100 },
+            { id: 10, day: "Day 4 (10/30)", category: "덕질/쇼핑", title: "큐즈몰 3층 덕질 샵 & 신사이바시 굿즈 쇼핑", amount: 8000 },
+            { id: 11, day: "Day 5 (10/31)", category: "식비/카페", title: "우메다 한큐 치이카와 랜드 쇼핑 후 로컬 점심/저녁", amount: 3400 },
+            { id: 12, day: "Day 5 (10/31)", category: "덕질/쇼핑", title: "우메다 치이카와 랜드 & 키디랜드 한정판 굿즈", amount: 10000 },
+            { id: 13, day: "Day 6 (11/01)", category: "교통/라커", title: "오사카 메트로 26시간권 1장 구입", amount: 1000 },
+            { id: 14, day: "Day 6 (11/01)", category: "식비/카페", title: "브런치 + 지하상가 카페 + 돈키호테 쇼핑", amount: 7100 },
+            { id: 15, day: "Day 7 (11/02)", category: "교통/라커", title: "신오사카 ⇄ 교토 JR 신쾌속 왕복 운임", amount: 1160 },
+            { id: 16, day: "Day 7 (11/02)", category: "식비/카페", title: "교토 우동 + 기온 말차 파르페 + 히가시미쿠니 저녁", amount: 4200 },
+            { id: 17, day: "Day 7 (11/02)", category: "덕질/쇼핑", title: "교토 치이카와 모구모구 본점 굿즈", amount: 3000 },
+            { id: 18, day: "Day 8 (11/03)", category: "교통/라커", title: "난바 코인라커(¥700) + 난카이 공항급행(¥970)", amount: 1670 },
+            { id: 19, day: "Day 8 (11/03)", category: "식비/카페", title: "마지막 브런치 + 공항 면세점 간식", amount: 3500 }
+        ];
+
+        // 상태 관리 변수
+        let currentSelectedDay = 1;
+        let checklistState = [];
+        let packingState = [];
+        let budgetState = [];
+
+        function loadState() {
+            try {
+                const savedCheck = localStorage.getItem('osaka2026_checklist_v2');
+                const savedPack = localStorage.getItem('osaka2026_packing_v2');
+                const savedBudget = localStorage.getItem('osaka2026_budget_v2');
+
+                checklistState = savedCheck ? JSON.parse(savedCheck) : JSON.parse(JSON.stringify(defaultChecklist));
+                packingState = savedPack ? JSON.parse(savedPack) : JSON.parse(JSON.stringify(defaultPacking));
+                budgetState = savedBudget ? JSON.parse(savedBudget) : JSON.parse(JSON.stringify(defaultBudget));
+            } catch (e) {
+                checklistState = JSON.parse(JSON.stringify(defaultChecklist));
+                packingState = JSON.parse(JSON.stringify(defaultPacking));
+                budgetState = JSON.parse(JSON.stringify(defaultBudget));
+            }
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem('osaka2026_checklist_v2', JSON.stringify(checklistState));
+                localStorage.setItem('osaka2026_packing_v2', JSON.stringify(packingState));
+                localStorage.setItem('osaka2026_budget_v2', JSON.stringify(budgetState));
+            } catch (e) {
+                console.warn('LocalStorage 저장 제한:', e);
+            }
+        }
+
+        function switchPage(pageId) {
+            const pages = ['plan', 'checklist', 'packing', 'budget'];
+            pages.forEach(p => {
+                const section = document.getElementById(`page-${p}`);
+                const tabBtn = document.getElementById(`tab-${p}`);
+                if (p === pageId) {
+                    section.classList.remove('hidden');
+                    tabBtn.className = "nav-tab flex-1 md:flex-initial flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-blue-600 text-white shadow whitespace-nowrap";
+                } else {
+                    section.classList.add('hidden');
+                    tabBtn.className = "nav-tab flex-1 md:flex-initial flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-300 hover:text-white hover:bg-slate-700/50 whitespace-nowrap";
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderDayTabs() {
+            const container = document.getElementById('dayTabsContainer');
+            const allBtn = document.getElementById('day-btn-all');
+            if (currentSelectedDay === 'all') {
+                allBtn.className = "text-xs font-bold px-3 py-1 rounded-lg bg-blue-600 text-white shadow transition";
+            } else {
+                allBtn.className = "text-xs font-semibold px-3 py-1 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition";
+            }
+
+            container.innerHTML = itineraryData.map(d => {
+                const isSelected = currentSelectedDay === d.day;
+                const weatherIcon = d.day === 2 ? '☀️' : (d.day === 1 || d.day === 4 ? '🌧️' : (d.day === 7 ? '🍁' : '⛅'));
+                return `
+                    <button onclick="selectDay(${d.day})" class="p-2 rounded-xl border text-left transition-all flex flex-col justify-between ${
+                        isSelected 
+                        ? 'bg-blue-600 text-white border-blue-600 shadow-md ring-2 ring-blue-300' 
+                        : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
+                    }">
+                        <div class="flex items-center justify-between w-full">
+                            <span class="text-[11px] font-extrabold ${isSelected ? 'text-blue-100' : 'text-blue-600'}">DAY ${d.day}</span>
+                            <span class="text-xs">${weatherIcon}</span>
+                        </div>
+                        <div class="text-xs font-bold mt-1 truncate">${d.shortDate}</div>
+                        <div class="text-[10px] ${isSelected ? 'text-blue-100' : 'text-slate-500'} truncate mt-0.5">${
+                            d.day === 2 ? 'USJ 정복' : (d.day === 6 ? '주일예배/덴덴' : (d.day === 7 ? '교토 신쾌속' : '오사카 핵심'))
+                        }</div>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function selectDay(day) {
+            currentSelectedDay = day;
+            renderDayTabs();
+            renderItinerary();
+        }
+
+        function getCategoryBadge(cat, isRest) {
+            if (isRest) {
+                return `<span class="rest-badge inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300 whitespace-nowrap"><i class="fa-solid fa-couch"></i> ${cat}</span>`;
+            }
+            if (cat.includes('맛집')) {
+                return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800 whitespace-nowrap"><i class="fa-solid fa-utensils"></i> ${cat}</span>`;
+            }
+            if (cat.includes('덕질')) {
+                return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-purple-100 text-purple-800 whitespace-nowrap"><i class="fa-solid fa-robot"></i> ${cat}</span>`;
+            }
+            if (cat.includes('패스') || cat.includes('조이패스')) {
+                return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-indigo-100 text-indigo-800 whitespace-nowrap"><i class="fa-solid fa-ticket"></i> ${cat}</span>`;
+            }
+            return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 whitespace-nowrap">${cat}</span>`;
+        }
+
+        function renderItinerary() {
+            const container = document.getElementById('itineraryContent');
+            const daysToRender = currentSelectedDay === 'all' 
+                ? itineraryData 
+                : itineraryData.filter(d => d.day === currentSelectedDay);
+
+            container.innerHTML = daysToRender.map(d => {
+                let weatherSectionHtml = '';
+                if (d.isFlightDay) {
+                    weatherSectionHtml = `
+                        <div class="bg-gradient-to-r from-slate-50 to-blue-50/60 rounded-xl p-3.5 sm:p-4 border border-blue-200 mb-4">
+                            <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 mb-2.5 border-b border-blue-200/70 text-xs">
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2 py-0.5 bg-blue-600 text-white font-bold rounded-lg"><i class="fa-solid fa-plane mr-1"></i>출도착 분리 기상정보</span>
+                                    <span class="text-slate-700 font-medium">일출 <strong class="text-amber-600">${d.sunrise}</strong> | 일몰 <strong class="text-indigo-600">${d.sunset}</strong></span>
+                                </div>
+                                <span class="text-slate-600 font-medium"><i class="fa-solid fa-shoe-prints text-blue-600 mr-1"></i>예상 걸음수: ${d.estSteps}</span>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2.5">
+                                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                                    <div class="text-[11px] font-bold text-blue-700 mb-0.5"><i class="fa-solid fa-plane-departure mr-1"></i>${d.flightWeather.departureLabel}</div>
+                                    <div class="text-xs sm:text-sm font-extrabold text-slate-900">${d.flightWeather.departureCond}</div>
+                                    <div class="text-[11px] text-slate-600 mt-0.5">기온: <strong>${d.flightWeather.departureTemp}</strong></div>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                                    <div class="text-[11px] font-bold text-indigo-700 mb-0.5"><i class="fa-solid fa-plane-arrival mr-1"></i>${d.flightWeather.arrivalLabel}</div>
+                                    <div class="text-xs sm:text-sm font-extrabold text-slate-900">${d.flightWeather.arrivalCond}</div>
+                                    <div class="text-[11px] text-slate-600 mt-0.5">기온: <strong>${d.flightWeather.arrivalTemp}</strong></div>
+                                </div>
+                            </div>
+                            <div class="p-2.5 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-900 leading-relaxed font-medium">
+                                ${d.flightWeather.warning}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    weatherSectionHtml = `
+                        <div class="bg-gradient-to-r from-slate-50 to-indigo-50/50 rounded-xl p-3.5 sm:p-4 border border-slate-200 mb-4">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-2.5 text-xs">
+                                <div class="bg-white p-3 rounded-xl border border-slate-200/80 flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-base font-bold shrink-0">
+                                        <i class="fa-solid fa-cloud-sun"></i>
+                                    </div>
+                                    <div>
+                                        <span class="text-[10px] text-slate-500 font-semibold block">당일 현지 날씨 & 기온</span>
+                                        <span class="text-xs font-extrabold text-slate-900">${d.weather.condition}</span>
+                                        <span class="text-[11px] text-slate-600 block">${d.weather.temp}</span>
+                                    </div>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border border-slate-200/80 flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-base font-bold shrink-0">
+                                        <i class="fa-solid fa-sun"></i>
+                                    </div>
+                                    <div>
+                                        <span class="text-[10px] text-slate-500 font-semibold block">일출 / 일몰 시각</span>
+                                        <span class="text-xs font-bold text-slate-800">일출 <strong class="text-amber-600">${d.sunrise}</strong></span>
+                                        <span class="text-xs font-bold text-slate-800 block">일몰 <strong class="text-indigo-600">${d.sunset}</strong></span>
+                                    </div>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border border-slate-200/80 flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-base font-bold shrink-0">
+                                        <i class="fa-solid fa-person-walking"></i>
+                                    </div>
+                                    <div>
+                                        <span class="text-[10px] text-slate-500 font-semibold block">워킹 & 허리 케어</span>
+                                        <span class="text-xs font-bold text-slate-900">${d.estSteps}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-2.5 bg-amber-50/90 border border-amber-200 rounded-xl text-xs text-amber-950 leading-relaxed font-medium">
+                                ${d.weather.warning}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                const rowsHtml = d.schedule.map(item => `
+                    <tr class="hover:bg-slate-50/90 transition ${item.isRest ? 'bg-amber-50/40' : ''}">
+                        <td class="py-3 px-3 font-bold text-slate-800 whitespace-nowrap text-xs align-top">
+                            ${item.time}
+                        </td>
+                        <td class="py-3 px-3 align-top">
+                            <div class="font-bold text-slate-900 text-xs sm:text-sm mb-1">${item.place}</div>
+                            ${getCategoryBadge(item.category, item.isRest)}
+                        </td>
+                        <td class="py-3 px-3 text-slate-600 text-xs leading-relaxed align-top min-w-[220px]">
+                            ${item.activity}
+                        </td>
+                        <td class="py-3 px-3 text-slate-700 text-xs font-medium whitespace-nowrap align-top">
+                            <span class="inline-flex items-center gap-1 px-2 py-1 bg-slate-100 rounded-lg">
+                                <i class="fa-solid fa-train-subway text-blue-600"></i> ${item.transport}
+                            </span>
+                        </td>
+                        <td class="py-3 px-3 text-slate-900 font-bold text-xs whitespace-nowrap align-top">
+                            ${item.cost}
+                        </td>
+                        <td class="py-3 px-3 text-center whitespace-nowrap align-top">
+                            <a href="${item.mapUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white text-xs font-bold border border-blue-200 transition shadow-sm">
+                                <i class="fa-solid fa-map-location-dot"></i> 구글맵
+                            </a>
+                        </td>
+                    </tr>
+                `).join('');
+
+                return `
+                    <article class="glass-card rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200">
+                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pb-3 mb-3 border-b border-slate-200">
+                            <div>
+                                <div class="flex flex-wrap items-center gap-2 mb-1">
+                                    <span class="px-2.5 py-0.5 rounded-lg bg-slate-900 text-white text-xs font-extrabold">DAY ${d.day}</span>
+                                    <span class="text-xs sm:text-sm font-bold text-blue-600">${d.date}</span>
+                                    <span class="text-xs bg-indigo-50 text-indigo-700 border border-indigo-200 px-2 py-0.5 rounded-full font-semibold">
+                                        <i class="fa-solid fa-bed mr-0.5"></i>${d.baseHotel}
+                                    </span>
+                                </div>
+                                <h3 class="text-base sm:text-lg font-extrabold text-slate-900">${d.title}</h3>
+                                <p class="text-xs text-slate-600 mt-0.5"><i class="fa-solid fa-sparkles text-amber-500 mr-1"></i><strong>핵심 포인트:</strong> ${d.theme}</p>
+                            </div>
+                            <div class="flex flex-col sm:flex-row lg:flex-col items-start sm:items-end justify-between gap-2">
+                                <span class="text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 px-2.5 py-1 rounded-xl">
+                                    <i class="fa-solid fa-ticket-simple mr-1"></i>${d.passUsed}
+                                </span>
+                                <a href="${d.fullRouteMapUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow transition whitespace-nowrap">
+                                    <i class="fa-solid fa-route"></i> DAY ${d.day} 전체 동선 구글맵
+                                </a>
+                            </div>
+                        </div>
+
+                        ${weatherSectionHtml}
+
+                        <div class="overflow-x-auto custom-scrollbar rounded-xl border border-slate-200 mb-4">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-900 text-white text-[11px] uppercase tracking-wider">
+                                        <th class="py-2.5 px-3 font-bold">시간대</th>
+                                        <th class="py-2.5 px-3 font-bold">장소명 & 구분</th>
+                                        <th class="py-2.5 px-3 font-bold">활동 내용</th>
+                                        <th class="py-2.5 px-3 font-bold">이동방법</th>
+                                        <th class="py-2.5 px-3 font-bold">예상 비용</th>
+                                        <th class="py-2.5 px-3 font-bold text-center">구글맵</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-200 bg-white">
+                                    ${rowsHtml}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="bg-slate-900 text-slate-100 rounded-xl p-3.5 sm:p-4 shadow-inner">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1.5">
+                                <h4 class="text-xs sm:text-sm font-bold text-blue-300 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-map-pin"></i> DAY ${d.day} (${d.shortDate}) 지도상 이동 경로 요약
+                                </h4>
+                                <a href="${d.fullRouteMapUrl}" target="_blank" class="text-[11px] text-amber-300 hover:underline font-semibold">
+                                    <i class="fa-solid fa-up-right-from-square mr-0.5"></i>경로 보기
+                                </a>
+                            </div>
+                            <p class="text-xs text-slate-200 leading-relaxed font-medium">
+                                ${d.routeSummary}
+                            </p>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        function renderChecklist() {
+            const container = document.getElementById('checklistContainer');
+            const categories = ["출국 전 필수", "패스 & 교통권", "숙소 & 현지팁", "덕질 & 쇼핑팁"];
+
+            const total = checklistState.length;
+            const doneCount = checklistState.filter(i => i.done).length;
+            const pct = total === 0 ? 0 : Math.round((doneCount / total) * 100);
+
+            document.getElementById('checklistProgressText').textContent = `${pct}% (${doneCount}/${total})`;
+            document.getElementById('checklistProgressBar').style.width = `${pct}%`;
+
+            container.innerHTML = categories.map(cat => {
+                const items = checklistState.filter(i => i.category === cat);
+                return `
+                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200">
+                        <h3 class="text-sm font-extrabold text-slate-800 mb-3 flex items-center justify-between">
+                            <span><i class="fa-solid fa-folder-open text-blue-600 mr-1.5"></i>${cat}</span>
+                            <span class="text-xs bg-white px-2 py-0.5 rounded-full border border-slate-200 text-slate-600">${items.filter(i=>i.done).length}/${items.length}</span>
+                        </h3>
+                        <div class="space-y-2">
+                            ${items.map(item => `
+                                <div class="flex items-start justify-between gap-2 p-2.5 rounded-xl bg-white border border-slate-200/80 shadow-sm hover:border-blue-300 transition">
+                                    <label class="flex items-start gap-2.5 cursor-pointer flex-1">
+                                        <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleChecklist(${item.id})" class="mt-1 w-4 h-4 text-blue-600 rounded focus:ring-blue-500 shrink-0">
+                                        <span class="text-xs sm:text-sm ${item.done ? 'line-through text-slate-400' : 'text-slate-800 font-medium'}">${item.text}</span>
+                                    </label>
+                                    <button onclick="deleteChecklist(${item.id})" class="text-slate-400 hover:text-rose-600 text-xs px-1.5 py-0.5">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleChecklist(id) {
+            const item = checklistState.find(i => i.id === id);
+            if (item) {
+                item.done = !item.done;
+                saveState();
+                renderChecklist();
+            }
+        }
+
+        function addChecklistItem() {
+            const input = document.getElementById('newCheckInput');
+            const category = document.getElementById('newCheckCategory').value;
+            const text = input.value.trim();
+            if (!text) return;
+            checklistState.push({ id: Date.now(), category, text, done: false });
+            input.value = '';
+            saveState();
+            renderChecklist();
+        }
+
+        function deleteChecklist(id) {
+            checklistState = checklistState.filter(i => i.id !== id);
+            saveState();
+            renderChecklist();
+        }
+
+        function renderPacking() {
+            const container = document.getElementById('packingContainer');
+            const categories = ["필수 서류 & 금융", "허리/발 케어 & 상비약", "의류 & 날씨 대비", "덕질(가챠/피규어) & 전자기기"];
+
+            const total = packingState.length;
+            const doneCount = packingState.filter(i => i.done).length;
+            const pct = total === 0 ? 0 : Math.round((doneCount / total) * 100);
+
+            document.getElementById('packingProgressText').textContent = `${pct}% (${doneCount}/${total})`;
+            document.getElementById('packingProgressBar').style.width = `${pct}%`;
+
+            container.innerHTML = categories.map(cat => {
+                const items = packingState.filter(i => i.category === cat);
+                return `
+                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200">
+                        <h3 class="text-sm font-extrabold text-slate-800 mb-3 flex items-center justify-between">
+                            <span><i class="fa-solid fa-box-open text-indigo-600 mr-1.5"></i>${cat}</span>
+                            <span class="text-xs bg-white px-2 py-0.5 rounded-full border border-slate-200 text-slate-600">${items.filter(i=>i.done).length}/${items.length}</span>
+                        </h3>
+                        <div class="space-y-2">
+                            ${items.map(item => `
+                                <div class="flex items-start justify-between gap-2 p-2.5 rounded-xl bg-white border border-slate-200/80 shadow-sm hover:border-indigo-300 transition">
+                                    <label class="flex items-start gap-2.5 cursor-pointer flex-1">
+                                        <input type="checkbox" ${item.done ? 'checked' : ''} onchange="togglePacking(${item.id})" class="mt-1 w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 shrink-0">
+                                        <span class="text-xs sm:text-sm ${item.done ? 'line-through text-slate-400' : 'text-slate-800 font-medium'}">${item.text}</span>
+                                    </label>
+                                    <button onclick="deletePacking(${item.id})" class="text-slate-400 hover:text-rose-600 text-xs px-1.5 py-0.5">
+                                        <i class="fa-solid fa-trash-can"></i>
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function togglePacking(id) {
+            const item = packingState.find(i => i.id === id);
+            if (item) {
+                item.done = !item.done;
+                saveState();
+                renderPacking();
+            }
+        }
+
+        function addPackingItem() {
+            const input = document.getElementById('newPackInput');
+            const category = document.getElementById('newPackCategory').value;
+            const text = input.value.trim();
+            if (!text) return;
+            packingState.push({ id: Date.now(), category, text, done: false });
+            input.value = '';
+            saveState();
+            renderPacking();
+        }
+
+        function deletePacking(id) {
+            packingState = packingState.filter(i => i.id !== id);
+            saveState();
+            renderPacking();
+        }
+
+        function renderBudget() {
+            const tbody = document.getElementById('budgetTableBody');
+            const ratePer100 = parseFloat(document.getElementById('exchangeRateInput').value) || 910;
+            const rate = ratePer100 / 100;
+
+            let totalYen = 0;
+            let transportYen = 0;
+            let foodShoppingYen = 0;
+
+            tbody.innerHTML = budgetState.map(item => {
+                totalYen += item.amount;
+                if (item.category === '교통/라커') transportYen += item.amount;
+                if (item.category === '식비/카페' || item.category === '덕질/쇼핑') foodShoppingYen += item.amount;
+
+                const krw = Math.round(item.amount * rate);
+                let catBadge = 'bg-slate-100 text-slate-700';
+                if (item.category === '식비/카페') catBadge = 'bg-rose-100 text-rose-800';
+                if (item.category === '교통/라커') catBadge = 'bg-emerald-100 text-emerald-800';
+                if (item.category === '덕질/쇼핑') catBadge = 'bg-purple-100 text-purple-800';
+                if (item.category === '관광/기타') catBadge = 'bg-blue-100 text-blue-800';
+
+                return `
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="py-3 px-3 sm:px-4 font-bold text-slate-700 whitespace-nowrap">${item.day}</td>
+                        <td class="py-3 px-3 sm:px-4 whitespace-nowrap">
+                            <span class="px-2 py-0.5 rounded-full text-[11px] font-bold ${catBadge}">${item.category}</span>
+                        </td>
+                        <td class="py-3 px-3 sm:px-4 text-slate-800 font-medium">${item.title}</td>
+                        <td class="py-3 px-3 sm:px-4 text-right font-bold text-slate-900 whitespace-nowrap">¥${item.amount.toLocaleString()}</td>
+                        <td class="py-3 px-3 sm:px-4 text-right font-semibold text-slate-500 whitespace-nowrap">₩${krw.toLocaleString()}</td>
+                        <td class="py-3 px-3 sm:px-4 text-center whitespace-nowrap">
+                            <button onclick="deleteBudgetItem(${item.id})" class="text-slate-400 hover:text-rose-600 transition px-2 py-1">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('totalYenDisplay').textContent = `¥${totalYen.toLocaleString()}`;
+            document.getElementById('totalKrwDisplay').textContent = `₩${Math.round(totalYen * rate).toLocaleString()}`;
+            document.getElementById('transportYenDisplay').textContent = `¥${transportYen.toLocaleString()}`;
+            document.getElementById('foodShoppingYenDisplay').textContent = `¥${foodShoppingYen.toLocaleString()}`;
+        }
+
+        function addBudgetItem() {
+            const day = document.getElementById('budgetDayInput').value;
+            const category = document.getElementById('budgetCategoryInput').value;
+            const titleInput = document.getElementById('budgetTitleInput');
+            const amountInput = document.getElementById('budgetAmountInput');
+
+            const title = titleInput.value.trim();
+            const amount = parseInt(amountInput.value, 10);
+
+            if (!title || isNaN(amount) || amount <= 0) return;
+
+            budgetState.push({ id: Date.now(), day, category, title, amount });
+            titleInput.value = '';
+            amountInput.value = '';
+            saveState();
+            renderBudget();
+        }
+
+        function deleteBudgetItem(id) {
+            budgetState = budgetState.filter(i => i.id !== id);
+            saveState();
+            renderBudget();
+        }
+
+        function openResetModal() {
+            const modal = document.getElementById('customModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('customModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function confirmResetData() {
+            localStorage.removeItem('osaka2026_checklist_v2');
+            localStorage.removeItem('osaka2026_packing_v2');
+            localStorage.removeItem('osaka2026_budget_v2');
+            loadState();
+            renderChecklist();
+            renderPacking();
+            renderBudget();
+            closeModal();
+        }
+
+        window.onload = function () {
+            loadState();
+            renderDayTabs();
+            renderItinerary();
+            renderChecklist();
+            renderPacking();
+            renderBudget();
+        };
+    </script>
+</body>
+</html>
+```
